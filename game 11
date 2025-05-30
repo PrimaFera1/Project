@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lab Escape Room: Kimia</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+            color: #333;
+            line-height: 1.6;
+        }
+        
+        h1 {
+            color: #2c3e50;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .level {
+            background-color: white;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+            display: none;
+            animation: fadeIn 0.5s;
+        }
+        
+        .active {
+            display: block;
+        }
+        
+        .question {
+            font-size: 1.2em;
+            margin-bottom: 20px;
+            font-weight: bold;
+            color: #2c3e50;
+        }
+        
+        .reaction {
+            font-family: monospace;
+            background-color: #f0f0f0;
+            padding: 10px;
+            border-radius: 5px;
+            margin: 10px 0;
+            text-align: center;
+        }
+        
+        input[type="text"] {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 1em;
+        }
+        
+        button {
+            background-color: #3498db;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1em;
+            transition: background-color 0.3s;
+        }
+        
+        button:hover {
+            background-color: #2980b9;
+        }
+        
+        .error {
+            color: #e74c3c;
+            margin-top: 10px;
+            display: none;
+        }
+        
+        .success {
+            text-align: center;
+            padding: 30px;
+            animation: fadeIn 1s;
+        }
+        
+        .success h2 {
+            color: #27ae60;
+            font-size: 2em;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        .level-indicator {
+            text-align: center;
+            margin-bottom: 20px;
+            font-weight: bold;
+            color: #7f8c8d;
+        }
+    </style>
+</head>
+<body>
+    <h1>Lab Escape Room: Kimia</h1>
+    
+    <div id="level1" class="level active">
+        <div class="level-indicator">Level 1/4</div>
+        <div class="question">Hitung jumlah mol H₂O yang dihasilkan dari reaksi 2 mol H₂ dan 1 mol O₂.</div>
+        <p>Reaksi: 2H₂ + O₂ → 2H₂O</p>
+        <input type="text" id="answer1" placeholder="Masukkan jawaban Anda...">
+        <button onclick="checkAnswer(1)">Submit</button>
+        <div id="error1" class="error">Jawaban salah, coba lagi.</div>
+    </div>
+    
+    <div id="level2" class="level">
+        <div class="level-indicator">Level 2/4</div>
+        <div class="question">Tentukan pH larutan dengan [H⁺] = 10⁻³ mol/L.</div>
+        <input type="text" id="answer2" placeholder="Masukkan jawaban Anda...">
+        <button onclick="checkAnswer(2)">Submit</button>
+        <div id="error2" class="error">Jawaban salah, coba lagi.</div>
+    </div>
+    
+    <div id="level3" class="level">
+        <div class="level-indicator">Level 3/4</div>
+        <div class="question">Apa koefisien dari H₂O dalam reaksi pembakaran lengkap C₂H₆?</div>
+        <div class="reaction">C₂H₆ + O₂ → CO₂ + H₂O</div>
+        <input type="text" id="answer3" placeholder="Masukkan jawaban Anda...">
+        <button onclick="checkAnswer(3)">Submit</button>
+        <div id="error3" class="error">Jawaban salah, coba lagi.</div>
+    </div>
+    
+    <div id="level4" class="level">
+        <div class="level-indicator">Level 4/4</div>
+        <div class="question">Senyawa manakah yang dapat mengalami reaksi adisi?</div>
+        <input type="text" id="answer4" placeholder="Masukkan jawaban Anda...">
+        <button onclick="checkAnswer(4)">Submit</button>
+        <div id="error4" class="error">Jawaban salah, coba lagi.</div>
+    </div>
+    
+    <div id="success" class="level" style="display: none;">
+        <div class="success">
+            <h2>Selamat! Kamu berhasil keluar dari lab.</h2>
+            <p>Kamu telah menyelesaikan semua tantangan kimia dengan sukses!</p>
+            <button onclick="restartGame()">Main Lagi</button>
+        </div>
+    </div>
+    
+    <script>
+        // Jawaban yang benar untuk setiap level
+        const correctAnswers = {
+            1: "2",
+            2: "3",
+            3: "3",
+            4: "alkena"
+        };
+        
+        // Fungsi untuk memeriksa jawaban
+        function checkAnswer(level) {
+            const answerInput = document.getElementById(`answer${level}`);
+            const errorElement = document.getElementById(`error${level}`);
+            const userAnswer = answerInput.value.trim().toLowerCase();
+            
+            if (userAnswer === correctAnswers[level]) {
+                // Jawaban benar
+                errorElement.style.display = "none";
+                
+                // Jika ini level terakhir, tampilkan pesan sukses
+                if (level === 4) {
+                    document.getElementById(`level${level}`).style.display = "none";
+                    document.getElementById("success").style.display = "block";
+                } else {
+                    // Sembunyikan level saat ini dan tampilkan level berikutnya
+                    document.getElementById(`level${level}`).style.display = "none";
+                    document.getElementById(`level${level + 1}`).style.display = "block";
+                }
+            } else {
+                // Jawaban salah
+                errorElement.style.display = "block";
+                answerInput.value = ""; // Kosongkan input
+                answerInput.focus(); // Fokuskan kembali ke input
+            }
+        }
+        
+        // Fungsi untuk memulai ulang game
+        function restartGame() {
+            // Sembunyikan pesan sukses
+            document.getElementById("success").style.display = "none";
+            
+            // Kosongkan semua input
+            for (let i = 1; i <= 4; i++) {
+                document.getElementById(`answer${i}`).value = "";
+                document.getElementById(`error${i}`).style.display = "none";
+            }
+            
+            // Sembunyikan semua level kecuali level 1
+            for (let i = 2; i <= 4; i++) {
+                document.getElementById(`level${i}`).style.display = "none";
+            }
+            
+            // Tampilkan level 1
+            document.getElementById("level1").style.display = "block";
+        }
+        
+        // Tambahkan event listener untuk tombol enter
+        document.addEventListener('DOMContentLoaded', function() {
+            for (let i = 1; i <= 4; i++) {
+                document.getElementById(`answer${i}`).addEventListener('keypress', function(e) {
+                    if (e.key === 'Enter') {
+                        checkAnswer(i);
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+</html>
